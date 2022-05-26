@@ -1,0 +1,32 @@
+.dashboard-layout {
+  display: grid;
+  grid-template-areas:
+    "nav contract search"
+    "nav contract content";
+  grid-template-columns: 5% 20% 1fr;
+  grid-template-rows: 8vh 1fr;
+  margin: 10px;
+  border: 1px solid gray;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+}
+.dashboard-nav {
+  grid-area: nav;
+  border-right: 1px solid gray;
+  padding: 12px 7px 0;
+}
+.dashboard-contract {
+  grid-area: contract;
+  padding: 10px;
+  border-right: 1px solid gray;
+}
+.dashboard-search {
+  grid-area: search;
+  padding: 10px;
+  border-bottom: 1px solid gray;
+  height: 8vh;
+}
+.dashboard-content {
+  grid-area: content;
+  padding: 10px;
+}

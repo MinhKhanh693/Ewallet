@@ -1,0 +1,12 @@
+.transfer-service-left{
+    box-shadow: 0 0 5px gray;
+    padding: 10px;
+}
+.transfer-service-right{
+    box-shadow: 0 0 5px gray;
+    padding: 10px;
+}
+.transfer-service-left-item{
+    text-align: center;
+    cursor: pointer;
+}
