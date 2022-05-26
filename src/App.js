@@ -15,10 +15,10 @@ function App() {
     <Fragment>
       <Routes>
         <Route path="*" exact element={<Result404 />} />
-        <Route path="/" element={<PrivateRoute />}>
-          <Route path="/dashboard" element={<DashboardLayout />}>
+        <Route path="/Ewallet/" element={<PrivateRoute />}>
+          <Route path="/Ewallet/dashboard" element={<DashboardLayout />}>
             <Route
-              path={"/dashboard/home"}
+              path={"/Ewallet/dashboard/home"}
               element={
                 <Fragment>
                   <div className="dashboard-search">
@@ -30,13 +30,13 @@ function App() {
                 </Fragment>
               }
             />
-            <Route path="/dashboard/analytics" element={<AnalyticsLayout />} />
-            <Route path="/dashboard/history" element={<HistoryLayout />} />
-            <Route path="/dashboard/settings" element={<SettingsLayout />} />
+            <Route path="/Ewallet/dashboard/analytics" element={<AnalyticsLayout />} />
+            <Route path="/Ewallet/dashboard/history" element={<HistoryLayout />} />
+            <Route path="/Ewallet/dashboard/settings" element={<SettingsLayout />} />
           </Route>
         </Route>
         <Route path="login" element={<PublicRouter />}>
-          <Route path="/login" element={<LoginLayout />} />
+          <Route path="/Ewallet/login" element={<LoginLayout />} />
         </Route>
       </Routes>
     </Fragment>

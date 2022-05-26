@@ -38,28 +38,28 @@ export function NavbarDashboard() {
         <Col span={12} style={{ maxWidth: "100%" }}>
           <Menu>
             <Menu.Item>
-              <NavLink to={"/dashboard/home"}>
+              <NavLink to={"/Ewallet/dashboard/home"}>
                 <Tooltip title="Home" placement="right">
                   <HomeOutlined style={styleIcon} />
                 </Tooltip>
               </NavLink>
             </Menu.Item>
             <Menu.Item>
-              <NavLink to={"/dashboard/analytics"}>
+              <NavLink to={"/Ewallet/dashboard/analytics"}>
                 <Tooltip title="Statistics" placement="right">
                   <LineChartOutlined style={styleIcon} />
                 </Tooltip>
               </NavLink>
             </Menu.Item>
             <Menu.Item>
-              <NavLink to={"/dashboard/history"}>
+              <NavLink to={"/Ewallet/dashboard/history"}>
                 <Tooltip title="History" placement="right">
                   <HistoryOutlined style={styleIcon} />
                 </Tooltip>
               </NavLink>
             </Menu.Item>
             <Menu.Item>
-              <NavLink to={"/dashboard/settings"}>
+              <NavLink to={"/Ewallet/dashboard/settings"}>
                 <Tooltip title="Settings" placement="right">
                   <SettingOutlined style={styleIcon} />
                 </Tooltip>
@@ -81,7 +81,7 @@ export function NavbarDashboard() {
                 onClick={(e) => {
                   dispatch(authActions.logout());
                   setTimeout(() => {
-                    navigate("/login");
+                    navigate("/Ewallet/login");
                   }, 1000);
                 }}
               />
