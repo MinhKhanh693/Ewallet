@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/Ewallet/static/css/main.d96fe817.css",
-    "main.js": "/Ewallet/static/js/main.b1e02915.js",
-    "static/js/787.d93d5682.chunk.js": "/Ewallet/static/js/787.d93d5682.chunk.js",
-    "index.html": "/Ewallet/index.html",
-    "main.d96fe817.css.map": "/Ewallet/static/css/main.d96fe817.css.map",
-    "main.b1e02915.js.map": "/Ewallet/static/js/main.b1e02915.js.map",
-    "787.d93d5682.chunk.js.map": "/Ewallet/static/js/787.d93d5682.chunk.js.map"
+    "main.css": "/static/css/main.d96fe817.css",
+    "main.js": "/static/js/main.d2683d21.js",
+    "static/js/787.d93d5682.chunk.js": "/static/js/787.d93d5682.chunk.js",
+    "index.html": "/index.html",
+    "main.d96fe817.css.map": "/static/css/main.d96fe817.css.map",
+    "main.d2683d21.js.map": "/static/js/main.d2683d21.js.map",
+    "787.d93d5682.chunk.js.map": "/static/js/787.d93d5682.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.d96fe817.css",
-    "static/js/main.b1e02915.js"
+    "static/js/main.d2683d21.js"
   ]
 }
