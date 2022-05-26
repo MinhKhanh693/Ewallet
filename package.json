@@ -2,7 +2,7 @@
   "name": "pjewallet",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://minhkhanh693.github.io/Ewallet",
+  "homepage": "https://minhkhanh693.github.io",
   "dependencies": {
     "@ant-design/charts": "^1.3.6",
     "@reduxjs/toolkit": "^1.8.1",

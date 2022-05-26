@@ -10,7 +10,7 @@ export function Result404() {
       title="404"
       subTitle="Sorry, the page you visited does not exist."
       extra={
-        <Button type="primary" onClick={(e) => navigate("/Ewallet/dashboard/home")}>
+        <Button type="primary" onClick={(e) => navigate("/dashboard/home")}>
           Back Home
         </Button>
       }
