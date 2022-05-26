@@ -6,7 +6,7 @@ function* HandleLogin(payload) {
     yield delay(500); // call api here
     localStorage.setItem("accses_Token", payload.username);
     yield put(authActions.loginSucces({ id: 1, name: "Hello" }));
-    yield put(payload.navigate("/dashboard/home"));
+    yield put(payload.navigate("/Ewallet/dashboard/home"));
   } catch (error) {
     yield put(authActions.loginFailed(error.massage));
   }
