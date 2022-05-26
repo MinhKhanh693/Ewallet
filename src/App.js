@@ -35,7 +35,7 @@ function App() {
             <Route path="/Ewallet/dashboard/settings" element={<SettingsLayout />} />
           </Route>
         </Route>
-        <Route path="login" element={<PublicRouter />}>
+        <Route path="/Ewallet/login" element={<PublicRouter />}>
           <Route path="/Ewallet/login" element={<LoginLayout />} />
         </Route>
       </Routes>
