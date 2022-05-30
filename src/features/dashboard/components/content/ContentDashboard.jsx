@@ -211,7 +211,7 @@ function PaymentHeader({ transferItem }) {
         <div className="payment-transfer">
           <Space size={"large"}>
             {transferItem.map((item, index) => (
-              <TransferItem index={index} item={item} />
+              <TransferItem index={index} item={item} key={index} />
             ))}
           </Space>
         </div>

@@ -14,7 +14,8 @@ function App() {
   return (
     <Fragment>
       <Routes>
-        <Route path="*" exact element={<Result404 />} />
+        <Route path="" element={<Result404 />} />
+        <Route path="*" element={<Result404 />} />
         <Route path="/" element={<PrivateRoute />}>
           <Route path="/dashboard" element={<DashboardLayout />}>
             <Route
@@ -35,7 +36,7 @@ function App() {
             <Route path="/dashboard/settings" element={<SettingsLayout />} />
           </Route>
         </Route>
-        <Route path="/login" element={<PublicRouter />}>
+        <Route path="login" element={<PublicRouter />}>
           <Route path="/login" element={<LoginLayout />} />
         </Route>
       </Routes>

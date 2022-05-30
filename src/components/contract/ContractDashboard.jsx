@@ -43,7 +43,7 @@ export default function ContractDashboard() {
             <Typography.Title level={5} style={style.styleTitle}>
               Total for all goals
             </Typography.Title>
-            <Typography.Title level={4}>$1000.0</Typography.Title>
+            <Typography.Title level={4}>$1230.98</Typography.Title>
           </Space>
         </Col>
         <Statics />
@@ -358,17 +358,17 @@ function Statics() {
     <Col span={6} style={style.styleCol}>
       <Space direction="vertical" size={"small"}>
         <Typography.Title level={5} style={style.styleTitle}>
-          Total for all goals
+          Total Net Wrom
         </Typography.Title>
-        <Typography.Title level={4}>$900.0</Typography.Title>
+        <Typography.Title level={4}>$927.97</Typography.Title>
         <Typography.Title level={5} style={style.styleTitle}>
-          Total for all goals
+          Total Lamings
         </Typography.Title>
-        <Typography.Title level={4}>$500.0</Typography.Title>
+        <Typography.Title level={4}>$523.27</Typography.Title>
         <Typography.Title level={5} style={style.styleTitle}>
-          Total for all goals
+          Net osset
         </Typography.Title>
-        <Typography.Title level={4}>$350.0</Typography.Title>
+        <Typography.Title level={4}>$0.00</Typography.Title>
       </Space>
     </Col>
   );

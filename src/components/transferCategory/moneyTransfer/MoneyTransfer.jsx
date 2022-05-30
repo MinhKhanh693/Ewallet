@@ -16,7 +16,7 @@ import {
   Space,
   Typography,
 } from "antd";
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   dashboardActions,
@@ -74,10 +74,12 @@ const myFriends = [
   },
 ];
 //#region Money Transfers
-
 export function MoneyTransfer() {
   const { is, name } = useSelector(selectIsOpenModalTransfers);
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [transferMyFriendVisible, setTransferMyFriendVisible] = useState(false);
+  const [myFriendInormation, setMyFriendInormation] = useState({});
+
   const dispatch = useDispatch();
   const handleOk = () => {
     setConfirmLoading(true);
@@ -169,9 +171,22 @@ export function MoneyTransfer() {
     return (
       <div className="list-friend-transfer">
         <Typography.Title level={4}>My friends</Typography.Title>
+        <MoneyTransferMyFriend
+          src={myFriendInormation.src}
+          name={myFriendInormation.name}
+          setTransferMyFriendVisible={setTransferMyFriendVisible}
+          transferMyFriendVisible={transferMyFriendVisible}
+        />
         <Row gutter={[15, 15]} style={{ padding: 20 }}>
           {myFriends.map((friend, index) => (
-            <Col span={4} key={index}>
+            <Col
+              span={4}
+              key={index}
+              onClick={(e) => {
+                setTransferMyFriendVisible(true);
+                setMyFriendInormation({ src: friend.src, name: friend.name });
+              }}
+            >
               <Space
                 direction="vertical"
                 align="center"
@@ -248,4 +263,36 @@ export function MoneyTransfer() {
   }
   //#endregion
 }
-//#endregion
+//#endregions
+
+export function MoneyTransferMyFriend({
+  src,
+  name,
+  setTransferMyFriendVisible,
+  transferMyFriendVisible,
+}) {
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const dispatch = useDispatch();
+  const handleOk = () => {
+    setConfirmLoading(true);
+    setTimeout(() => {
+      setConfirmLoading(false);
+      setTransferMyFriendVisible(false);
+    }, 2000);
+  };
+
+  const handleCancel = () => {
+    console.log("Clicked cancel button");
+    setTransferMyFriendVisible(false);
+  };
+  return (
+    <Modal
+      width={400}
+      title={<Avatar src={src} size={"large"} />}
+      visible={transferMyFriendVisible}
+      onOk={handleOk}
+      confirmLoading={confirmLoading}
+      onCancel={handleCancel}
+    ></Modal>
+  );
+}
