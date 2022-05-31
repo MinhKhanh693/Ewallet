@@ -18,6 +18,8 @@ import {
   Upload,
 } from "antd";
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { appActions, appSelect } from "../../app/appSlice";
 
 const style = {
   styleCol: {
@@ -35,18 +37,24 @@ const style = {
 export default function ContractDashboard() {
   const [topUp, setTopUp] = useState(false);
   const [withDrawals, setithDrawals] = useState(false);
+  const totalRemainder = useSelector(appSelect.selectTotalRemainder);
+  const totalExpenditure = useSelector(appSelect.selectTotalExpenditure);
+  const totalRevenue = useSelector(appSelect.selectTotalRevenue);
   return (
     <div className="ContractDashboard" style={{ height: "100vh" }}>
       <Row style={{ flexDirection: "column", height: "100%" }} justify="center">
         <Col span={6} style={style.styleCol}>
           <Space direction="vertical" size={"small"}>
             <Typography.Title level={5} style={style.styleTitle}>
-              Total for all goals
+              Total Remainder
             </Typography.Title>
-            <Typography.Title level={4}>$1230.98</Typography.Title>
+            <Typography.Title level={4}>${totalRemainder}</Typography.Title>
           </Space>
         </Col>
-        <Statics />
+        <Statics
+          totalExpenditure={totalExpenditure}
+          totalRevenue={totalRevenue}
+        />
         <Col span={12} style={style.styleCol}>
           <Space
             size={"large"}
@@ -62,11 +70,16 @@ export default function ContractDashboard() {
               </p>
             </Upload.Dragger>
             <Space>
-              <TopUp visible={topUp} setTopUp={setTopUp}></TopUp>
+              <TopUp
+                visible={topUp}
+                setTopUp={setTopUp}
+                totalRemainder={totalRemainder}
+              ></TopUp>
               <WithDrawals
                 visible={withDrawals}
                 setithDrawals={setithDrawals}
-              ></WithDrawals>
+                totalRemainder={totalRemainder}
+              />
               <Button
                 onClick={() => setTopUp(true)}
                 size="large"
@@ -91,19 +104,21 @@ export default function ContractDashboard() {
     </div>
   );
 }
-function TopUp({ visible, setTopUp }) {
+function TopUp({ visible, setTopUp, totalRemainder }) {
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [value, setValue] = useState(0);
+  const dispatch = useDispatch();
 
   const handleOk = () => {
     setConfirmLoading(true);
     setTimeout(() => {
       setTopUp(false);
       setConfirmLoading(false);
+      dispatch(appActions.topUp(value));
     }, 2000);
   };
 
   const handleCancel = () => {
-    console.log("Clicked cancel button");
     setTopUp(false);
   };
   return (
@@ -121,7 +136,7 @@ function TopUp({ visible, setTopUp }) {
         align="center"
         style={{ width: "100%" }}
       >
-        <TopUpInput />
+        <TopUpInput totalRemainder={totalRemainder} />
       </Space>
       <Space
         direction="vertical"
@@ -173,7 +188,7 @@ function TopUp({ visible, setTopUp }) {
     );
   }
 
-  function TopUpInput() {
+  function TopUpInput({ totalRemainder }) {
     return (
       <Space
         direction="vertical"
@@ -197,10 +212,14 @@ function TopUp({ visible, setTopUp }) {
         >
           <DollarOutlined style={{ color: "gray", fontSize: 30 }} />
           <Typography.Text style={{ fontWeight: "bold", fontSize: 18 }}>
-            Số dư ví : $100.0
+            Số dư ví : ${totalRemainder}
           </Typography.Text>
         </Space>
         <Input
+          min={1}
+          value={value}
+          onChange={(e) => setValue(e.value)}
+          type={"number"}
           placeholder="Số tiền cần nạp"
           style={{ borderRadius: 5, margin: 5 }}
           prefix={<DollarOutlined style={{ color: "gray" }} />}
@@ -210,10 +229,38 @@ function TopUp({ visible, setTopUp }) {
           align="center"
           style={{ justifyContent: "space-evenly", width: "100%" }}
         >
-          <Tag icon={<DollarOutlined style={{ color: "gray" }} />}>100.0 $</Tag>
-          <Tag icon={<DollarOutlined style={{ color: "gray" }} />}>200.0 $</Tag>
-          <Tag icon={<DollarOutlined style={{ color: "gray" }} />}>500.0 $</Tag>
-          <Tag icon={<DollarOutlined style={{ color: "gray" }} />}>
+          <Tag
+            style={{ cursor: "pointer" }}
+            icon={<DollarOutlined style={{ color: "gray" }} />}
+            onClick={(e) => setValue(100.0)}
+          >
+            100.0 $
+          </Tag>
+          <Tag
+            style={{ cursor: "pointer" }}
+            icon={
+              <DollarOutlined style={{ color: "gray", cursor: "pointer" }} />
+            }
+            onClick={(e) => setValue(200.0)}
+          >
+            200.0 $
+          </Tag>
+          <Tag
+            style={{ cursor: "pointer" }}
+            icon={
+              <DollarOutlined style={{ color: "gray", cursor: "pointer" }} />
+            }
+            onClick={(e) => setValue(500.0)}
+          >
+            500.0 $
+          </Tag>
+          <Tag
+            style={{ cursor: "pointer" }}
+            icon={
+              <DollarOutlined style={{ color: "gray", cursor: "pointer" }} />
+            }
+            onClick={(e) => setValue(1000.0)}
+          >
             1000.0 $
           </Tag>
         </Space>
@@ -222,14 +269,16 @@ function TopUp({ visible, setTopUp }) {
   }
 }
 
-function WithDrawals({ visible, setithDrawals }) {
+function WithDrawals({ visible, setithDrawals, totalRemainder }) {
   const [confirmLoading, setConfirmLoading] = useState(false);
-
+  const [value, setValue] = useState(0);
+  const dispatch = useDispatch();
   const handleOk = () => {
     setConfirmLoading(true);
     setTimeout(() => {
       setithDrawals(false);
       setConfirmLoading(false);
+      dispatch(appActions.withDrawals(value));
     }, 2000);
   };
 
@@ -252,7 +301,7 @@ function WithDrawals({ visible, setithDrawals }) {
         align="center"
         style={{ width: "100%" }}
       >
-        <TopUpInput />
+        <TopUpInput totalRemainder={totalRemainder} />
       </Space>
       <Space
         direction="vertical"
@@ -304,7 +353,7 @@ function WithDrawals({ visible, setithDrawals }) {
     );
   }
 
-  function TopUpInput() {
+  function TopUpInput({ totalRemainder }) {
     return (
       <Space
         direction="vertical"
@@ -328,10 +377,14 @@ function WithDrawals({ visible, setithDrawals }) {
         >
           <DollarOutlined style={{ color: "gray", fontSize: 30 }} />
           <Typography.Text style={{ fontWeight: "bold", fontSize: 18 }}>
-            Số dư ví : $100.0
+            Số dư ví : ${totalRemainder}
           </Typography.Text>
         </Space>
         <Input
+          onChange={(e) => setValue(e.value)}
+          value={value}
+          type={"number"}
+          min={1}
           placeholder="Số tiền cần rút"
           style={{ borderRadius: 5, margin: 5 }}
           prefix={<DollarOutlined style={{ color: "gray" }} />}
@@ -341,10 +394,32 @@ function WithDrawals({ visible, setithDrawals }) {
           align="center"
           style={{ justifyContent: "space-evenly", width: "100%" }}
         >
-          <Tag icon={<DollarOutlined style={{ color: "gray" }} />}>100.0 $</Tag>
-          <Tag icon={<DollarOutlined style={{ color: "gray" }} />}>200.0 $</Tag>
-          <Tag icon={<DollarOutlined style={{ color: "gray" }} />}>500.0 $</Tag>
-          <Tag icon={<DollarOutlined style={{ color: "gray" }} />}>
+          <Tag
+            style={{ cursor: "pointer" }}
+            icon={<DollarOutlined style={{ color: "gray" }} />}
+            onClick={(e) => setValue(100.0)}
+          >
+            100.0 $
+          </Tag>
+          <Tag
+            style={{ cursor: "pointer" }}
+            icon={<DollarOutlined style={{ color: "gray" }} />}
+            onClick={(e) => setValue(200.0)}
+          >
+            200.0 $
+          </Tag>
+          <Tag
+            style={{ cursor: "pointer" }}
+            icon={<DollarOutlined style={{ color: "gray" }} />}
+            onClick={(e) => setValue(500.0)}
+          >
+            500.0 $
+          </Tag>
+          <Tag
+            style={{ cursor: "pointer" }}
+            icon={<DollarOutlined style={{ color: "gray" }} />}
+            onClick={(e) => setValue(1000.0)}
+          >
             1000.0 $
           </Tag>
         </Space>
@@ -353,22 +428,24 @@ function WithDrawals({ visible, setithDrawals }) {
   }
 }
 
-function Statics() {
+function Statics({ totalExpenditure, totalRevenue }) {
   return (
     <Col span={6} style={style.styleCol}>
       <Space direction="vertical" size={"small"}>
         <Typography.Title level={5} style={style.styleTitle}>
-          Total Net Wrom
+          Total Expenditure
         </Typography.Title>
-        <Typography.Title level={4}>$927.97</Typography.Title>
+        <Typography.Title level={4}>${totalExpenditure}</Typography.Title>
         <Typography.Title level={5} style={style.styleTitle}>
-          Total Lamings
+          Total Revenue
         </Typography.Title>
-        <Typography.Title level={4}>$523.27</Typography.Title>
+        <Typography.Title level={4}>${totalRevenue}</Typography.Title>
         <Typography.Title level={5} style={style.styleTitle}>
           Net osset
         </Typography.Title>
-        <Typography.Title level={4}>$0.00</Typography.Title>
+        <Typography.Title level={4}>
+          ${Math.floor(totalExpenditure - totalRevenue)}
+        </Typography.Title>
       </Space>
     </Col>
   );

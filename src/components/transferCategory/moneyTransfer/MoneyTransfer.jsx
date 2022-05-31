@@ -1,7 +1,10 @@
 import {
   BankOutlined,
+  CheckCircleOutlined,
+  ClockCircleOutlined,
   DollarCircleOutlined,
   GiftOutlined,
+  IssuesCloseOutlined,
   SketchOutlined,
   UsergroupAddOutlined,
   YoutubeOutlined,
@@ -10,13 +13,18 @@ import {
   AutoComplete,
   Avatar,
   Col,
+  Divider,
+  Image,
   Input,
+  InputNumber,
   Modal,
   Row,
   Space,
+  Tag,
   Typography,
+  message,
 } from "antd";
-import React, { Fragment, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   dashboardActions,
@@ -150,7 +158,14 @@ export function MoneyTransfer() {
           dropdownMatchSelectWidth={252}
           style={{ width: 400 }}
           options={myFriends.map((item) => renderOption(item.src, item.name))}
-          //   onSelect={onSelect}
+          onSelect={(data) => {
+            console.log(data);
+            setTransferMyFriendVisible(true);
+            setMyFriendInormation({
+              src: "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8cGVvcGxlfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
+              name: data,
+            });
+          }}
           filterOption={(inputValue, option) =>
             option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
           }
@@ -177,6 +192,7 @@ export function MoneyTransfer() {
           setTransferMyFriendVisible={setTransferMyFriendVisible}
           transferMyFriendVisible={transferMyFriendVisible}
         />
+
         <Row gutter={[15, 15]} style={{ padding: 20 }}>
           {myFriends.map((friend, index) => (
             <Col
@@ -263,36 +279,237 @@ export function MoneyTransfer() {
   }
   //#endregion
 }
-//#endregions
+//#endregion
 
-export function MoneyTransferMyFriend({
+//#region MoneyTransferMyFriend
+const warning = () => {
+  message.warning("vui lòng nhập số tiền cần chuyển");
+};
+function MoneyTransferMyFriend({
   src,
   name,
   setTransferMyFriendVisible,
   transferMyFriendVisible,
 }) {
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const dispatch = useDispatch();
+  const [confrimTransferVisible, setConfrimTransferVisible] = useState(false);
+  const [value, setValue] = useState(0);
+  const [message, setMessage] = useState("");
+
+  const handleOk = () => {
+    if (value === 0) {
+      warning();
+    } else {
+      setConfirmLoading(true);
+      setTimeout(() => {
+        setConfirmLoading(false);
+        setConfrimTransferVisible(true);
+      }, 2000);
+    }
+  };
+
+  const handleCancel = () => {
+    setTransferMyFriendVisible(false);
+  };
+
+  return (
+    <>
+      <ConfirmTransferMyfriend
+        name={name}
+        confrimTransferVisible={confrimTransferVisible}
+        setConfrimTransferVisible={setConfrimTransferVisible}
+        value={value}
+        message={message}
+        src={src}
+        setTransferMyFriendVisible={setTransferMyFriendVisible}
+      />
+      <Modal
+        width={400}
+        title={name}
+        visible={transferMyFriendVisible}
+        onOk={handleOk}
+        confirmLoading={confirmLoading}
+        onCancel={handleCancel}
+      >
+        <Space
+          direction="vertical"
+          style={{ width: "100%" }}
+          align="center"
+          size={"middle"}
+        >
+          <InputNumber
+            style={{ width: "150px" }}
+            min={0}
+            defaultValue={0}
+            formatter={(value) =>
+              `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            }
+            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+            onChange={(value) => setValue(value)}
+          />
+          <Input.TextArea
+            rows={4}
+            value={message}
+            style={{ width: "350px", borderRadius: 10 }}
+            placeholder="Nhập lời nhắn"
+            onChange={(e) => setMessage(e.target.value)}
+          />
+          <Space>
+            <Tag
+              style={{ borderRadius: 10, cursor: "pointer" }}
+              onClick={(e) => {
+                console.log(e);
+                setMessage(e.target.innerText + "💰");
+              }}
+            >
+              Chốt đơn !!!
+            </Tag>
+            <Tag
+              style={{ borderRadius: 10, cursor: "pointer" }}
+              onClick={(e) => {
+                console.log(e);
+                setMessage(e.target.innerText + "💰");
+              }}
+            >
+              Chuyển tiền nha.
+            </Tag>
+            <Tag
+              style={{ borderRadius: 10, cursor: "pointer" }}
+              onClick={(e) => {
+                console.log(e);
+                setMessage(e.target.innerText + "💰");
+              }}
+            >
+              Cảm ơn Shop
+            </Tag>
+          </Space>
+          <Image
+            src={src}
+            style={{ width: 360, height: 350, objectFit: "cover" }}
+          ></Image>
+        </Space>
+      </Modal>
+    </>
+  );
+}
+//#endregion
+
+//#region ConfirmTransferMyfriend
+function ConfirmTransferMyfriend({
+  message,
+  value,
+  src,
+  name,
+  confrimTransferVisible,
+  setConfrimTransferVisible,
+  setTransferMyFriendVisible,
+}) {
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [status, setStatus] = useState(false);
+  const [statusConfirm, setStatusConfirm] = useState(false);
+
   const handleOk = () => {
     setConfirmLoading(true);
     setTimeout(() => {
       setConfirmLoading(false);
-      setTransferMyFriendVisible(false);
+      setStatusConfirm(true);
     }, 2000);
+    setTimeout(() => {
+      setStatus(true);
+    }, 5000);
+    if (status) {
+      handleCancel();
+    }
   };
 
   const handleCancel = () => {
-    console.log("Clicked cancel button");
+    setConfrimTransferVisible(false);
     setTransferMyFriendVisible(false);
   };
   return (
     <Modal
       width={400}
       title={<Avatar src={src} size={"large"} />}
-      visible={transferMyFriendVisible}
+      visible={confrimTransferVisible}
       onOk={handleOk}
       confirmLoading={confirmLoading}
       onCancel={handleCancel}
-    ></Modal>
+    >
+      <Space direction="vertical">
+        {statusConfirm ? (
+          status ? (
+            <Space
+              direction="vertical"
+              align="center"
+              style={{ width: "100%" }}
+            >
+              <CheckCircleOutlined
+                style={{ fontSize: 50, color: "yellowgreen" }}
+              />
+              <Typography.Title level={3} style={{ color: "yellowgreen" }}>
+                Hoàn thành
+              </Typography.Title>
+            </Space>
+          ) : (
+            <Space
+              direction="vertical"
+              align="center"
+              style={{ width: "100%" }}
+            >
+              <ClockCircleOutlined style={{ fontSize: 50, color: "orange" }} />
+              <Typography.Title level={3} style={{ color: "orange" }}>
+                Đang thực thi
+              </Typography.Title>
+            </Space>
+          )
+        ) : (
+          <Space direction="vertical" align="center" style={{ width: "100%" }}>
+            <IssuesCloseOutlined
+              style={{ fontSize: 50, color: "#e6ff06b93" }}
+            />
+            <Typography.Title level={3} style={{ color: "#e6ff06b93" }}>
+              Chờ xác nhận
+            </Typography.Title>
+          </Space>
+        )}
+
+        <Typography.Title level={5}>CHI TIẾT GIAO DỊCH</Typography.Title>
+        <Space
+          direction="vertical"
+          style={{
+            padding: 10,
+            borderRadius: 10,
+            border: "1px solid #c9c4c4",
+            width: "350px",
+          }}
+        >
+          <Space style={{ justifyContent: "space-between", width: "100%" }}>
+            <Typography.Title level={5}>Chuyển đến</Typography.Title>
+            <Typography.Title level={5}>{name}</Typography.Title>
+          </Space>
+          <Space style={{ justifyContent: "space-between", width: "100%" }}>
+            <Typography.Title level={5}>Tên danh bạ</Typography.Title>
+            <Typography.Title level={5}>{name}</Typography.Title>
+          </Space>
+          <Space style={{ justifyContent: "space-between", width: "100%" }}>
+            <Typography.Title level={5}>Số tiền</Typography.Title>
+            <Typography.Title level={5}>{value} $</Typography.Title>
+          </Space>
+          <Divider style={{ margin: 0 }} />
+          <Space style={{ justifyContent: "space-between", width: "100%" }}>
+            <Typography.Title level={5}>Phí giao dịch</Typography.Title>
+            <Typography.Title level={5}>Miễn phí</Typography.Title>
+          </Space>
+          <Typography.Title level={4}>Lời nhắn</Typography.Title>
+          <Typography.Paragraph>{message}</Typography.Paragraph>
+          <Divider style={{ margin: 0 }} />
+          <Space style={{ justifyContent: "space-between", width: "100%" }}>
+            <Typography.Title level={4}>Tổng tiền</Typography.Title>
+            <Typography.Title level={5}>{value} $</Typography.Title>
+          </Space>
+        </Space>
+      </Space>
+    </Modal>
   );
 }
+//#endregion

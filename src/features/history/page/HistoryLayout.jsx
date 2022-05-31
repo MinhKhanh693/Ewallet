@@ -9,34 +9,61 @@ import {
   ThunderboltOutlined,
   UserSwitchOutlined,
   WifiOutlined,
+  HomeOutlined,
 } from "@ant-design/icons";
 import { Col, Row, Space, Table, Timeline, Typography } from "antd";
 import React from "react";
+import { useSelector } from "react-redux";
+import { appSelect } from "../../../app/appSlice";
 import "./HistoryLayout.css";
+import { Bar } from "@ant-design/plots";
+
+//#region HistoryLayout
 export function HistoryLayout() {
+  const data = useSelector(appSelect.selectHistory);
+  const totalRemainder = useSelector(appSelect.selectTotalRemainder);
+  const totalExpenditure = useSelector(appSelect.selectTotalExpenditure);
+  const totalRevenue = useSelector(appSelect.selectTotalRevenue);
   return (
     <div className="history-layout">
-      <HistoryMoneyCard />
+      <HistoryMoneyCard
+        totalRemainder={totalRemainder}
+        totalExpenditure={totalExpenditure}
+        totalRevenue={totalRevenue}
+      />
       <Row style={{ overflow: "auto", marginTop: 30 }}>
-        <Col span={8} style={{ padding: 10, overflow: "auto", height: 500 }}>
+        <HistoryTable data={data} />
+        <Col
+          span={8}
+          style={{ padding: "10px 10px 10px 0", overflow: "auto", height: 400 }}
+        >
           <Timeline mode={"left"}>
             {data.map((item, index) => (
-              <Timeline.Item label={item.Date} dot={item.icon}>
-                <Typography.Title level={5}>{item.Name}</Typography.Title>
+              <Timeline.Item
+                label={item.dateTime}
+                dot={formatIcons(item.category)}
+              >
                 <Typography.Title level={5}>
-                  {item.$} | {item.Category}
+                  {item.name} | {item.category}
+                </Typography.Title>
+                <Typography.Title level={5}>
+                  Amount : {item.amount}$
                 </Typography.Title>
               </Timeline.Item>
             ))}
           </Timeline>
         </Col>
-        <HistoryTable />
+        <Col span={16}>
+          <DemoBar data={data} />
+        </Col>
       </Row>
     </div>
   );
 }
+//#endregion
 
-function HistoryMoneyCard() {
+//#region HistoryMoneyCard
+function HistoryMoneyCard({ totalRemainder, totalExpenditure, totalRevenue }) {
   return (
     <Space
       style={{
@@ -59,7 +86,7 @@ function HistoryMoneyCard() {
               fontWeight: "bold",
             }}
           >
-            250.0 $
+            {totalRemainder} $
           </Typography.Text>
           <RetweetOutlined
             style={{
@@ -92,7 +119,7 @@ function HistoryMoneyCard() {
               fontWeight: "bold",
             }}
           >
-            1000.0 $
+            {totalRevenue} $
           </Typography.Text>
           <ArrowDownOutlined
             style={{
@@ -125,7 +152,7 @@ function HistoryMoneyCard() {
               fontWeight: "bold",
             }}
           >
-            850.0 $
+            {totalExpenditure} $
           </Typography.Text>
           <ArrowUpOutlined
             style={{
@@ -147,102 +174,87 @@ function HistoryMoneyCard() {
     </Space>
   );
 }
+//#endregion
 
-function HistoryTable() {
+//#region HistoryTable
+function HistoryTable({ data }) {
   const columns = [
     {
-      title: "Name",
-      dataIndex: "Name",
+      title: "name",
+      dataIndex: "name",
       width: "25%",
     },
     {
-      title: "$",
-      dataIndex: "$",
+      title: "amount",
+      dataIndex: "amount",
       width: "15%",
     },
     {
-      title: "Date",
-      dataIndex: "Date",
+      title: "dateTime",
+      dataIndex: "dateTime",
       width: "30%",
     },
     {
-      title: "Category",
-      dataIndex: "Category",
+      title: "category",
+      dataIndex: "category",
       width: "20%",
     },
     {
-        title: "icon",
-        dataIndex: "icon",
-        width: "10%",
+      title: "icon",
+      dataIndex: "category",
+      width: "10%",
+      render(_, record) {
+        return formatIcons(record.category);
       },
+    },
   ];
   return (
-    <Col span={16} style={{padding:5}}>
+    <Col span={24} style={{ padding: 5 }}>
       <Table
         bordered
         dataSource={data}
         columns={columns}
         rowClassName="editable-row"
         rowKey={(record) => record.Name}
+        pagination={{ pageSize: 5 }}
       ></Table>
     </Col>
   );
 }
-const data = [
-  {
-    Name: "Quốc Khánh",
-    $: "200$",
-    Date: "2022-06-24  09:50:22",
-    Category: "Transfer",
-    icon: <UserSwitchOutlined style={{ fontSize: 20, color: "red" }} />,
-  },
-  {
-    Name: "Viettel",
-    $: "400$",
-    Date: "2022-06-22 09:50:22",
-    Category: "Wifi",
-    icon: <WifiOutlined style={{ fontSize: 20, color: "Green" }} />,
-  },
-  {
-    Name: "Electricity",
-    $: "600$",
-    Date: "2022-06-18 09:50:22",
-    Category: "Electricity",
-    icon: <ThunderboltOutlined style={{ fontSize: 20, color: "yellow" }} />,
-  },
-  {
-    Name: "Water",
-    $: "700$",
-    Date: "2022-06-12 09:50:22",
-    Category: "Water",
-    icon: <StockOutlined style={{ fontSize: 20, color: "blue" }} />,
-  },
-  {
-    Name: "DH.THỦ DẦU MỘT",
-    $: "500$",
-    Date: "2022-05-25 09:50:22",
-    Category: "Tuition fees",
-    icon: <AuditOutlined style={{ fontSize: 20, color: "orange" }} />,
-  },
-  {
-    Name: "MOMO",
-    $: "210$",
-    Date: "2022-05-22 09:50:22",
-    Category: "Tranfer",
-    icon: <UserSwitchOutlined style={{ fontSize: 20, color: "red" }} />,
-  },
-  {
-    Name: "Medic",
-    $: "370$",
-    Date: "2022-05-18 09:50:22",
-    Category: "Medical",
-    icon: <HeartOutlined style={{ fontSize: 20, color: "pink" }} />,
-  },
-  {
-    Name: "BIDV",
-    $: "870$",
-    Date: "2022-05-15 09:50:22",
-    Category: "Tranfer",
-    icon: <UserSwitchOutlined style={{ fontSize: 20, color: "red" }} />,
-  },
-];
+//#endregion
+
+//#region formatIcons
+const formatIcons = (category) => {
+  switch (category) {
+    case "Transfer":
+      return <UserSwitchOutlined style={{ fontSize: 20, color: "red" }} />;
+    case "Wifi":
+      return <WifiOutlined style={{ fontSize: 20, color: "Green" }} />;
+    case "Electricity":
+      return <ThunderboltOutlined style={{ fontSize: 20, color: "yellow" }} />;
+    case "Water":
+      return <StockOutlined style={{ fontSize: 20, color: "blue" }} />;
+    case "Tuition Fees":
+      return <AuditOutlined style={{ fontSize: 20, color: "orange" }} />;
+    case "Medical":
+      return <HeartOutlined style={{ fontSize: 20, color: "pink" }} />;
+    case "Office":
+      return <HomeOutlined style={{ fontSize: 20, color: "blue" }} />;
+    default:
+      break;
+  }
+};
+//#endregion
+
+const DemoBar = ({ data }) => {
+  const config = {
+    data,
+    xField: "amount",
+    yField: "dateTime",
+    seriesField: "category",
+    legend: {
+      position: "top-left",
+    },
+  };
+  return <Bar {...config} style={{ padding: 10 }} />;
+};

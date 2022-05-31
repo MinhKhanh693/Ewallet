@@ -11,7 +11,7 @@ import {
 } from "@ant-design/icons";
 import { Button, Col, Image, Row, Space, Table, Typography } from "antd";
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { dashboardActions } from "../../dashboardSlice";
 import {
   ElectricityTranfers,
@@ -24,6 +24,7 @@ import {
 } from "../../../../components/transferCategory";
 
 import "./ContentDashboard.css";
+import { appSelect } from "../../../../app/appSlice";
 
 const transferItem = [
   {
@@ -56,47 +57,34 @@ const transferItem = [
   },
 ];
 
-const data = [
-  {
-    key: "1",
-    name: "Minh Triết",
-    many: "$32,9",
-    address: "New York No. 1 Lake Park",
-  },
-  {
-    key: "2",
-    name: "Hồng Hải",
-    many: "$12,5",
-    address: "London No. 1 Lake Park",
-  },
-  {
-    key: "3",
-    name: "Đức Huy",
-    many: "$33,5",
-    address: "Sidney No. 1 Lake Park",
-  },
-  {
-    key: "4",
-    name: "Quốc Khánh",
-    many: "$31,2",
-    address: "London No. 2 Lake Park",
-  },
-];
 const columns = [
   {
     title: "Name",
     dataIndex: "name",
     key: "name",
-    width: "70%",
+    width: "40%",
   },
   {
     title: "$",
-    dataIndex: "many",
-    key: "many",
+    dataIndex: "amount",
+    key: "amount",
+    width: "10%",
+  },
+  {
+    title: "DateTime",
+    dataIndex: "dateTime",
+    key: "dateTime",
+    width: "30%",
+  },
+  {
+    title: "Category",
+    dataIndex: "category",
+    key: "category",
     width: "30%",
   },
 ];
 export function ContentDashboard() {
+  const data = useSelector(appSelect.selectHistory);
   return (
     <div className="ContentDashboard">
       <div className="content-payment">
@@ -108,7 +96,13 @@ export function ContentDashboard() {
               style={{ borderRight: "1px solid gray", height: "100%" }}
             >
               <div className="payment-under-left">
-                <Table columns={columns} dataSource={data} />
+                <Table
+                  columns={columns}
+                  dataSource={data}
+                  pagination={{
+                    pageSize: 4,
+                  }}
+                />
               </div>
             </Col>
             <Col span={8}>
