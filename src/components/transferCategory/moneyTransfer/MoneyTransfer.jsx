@@ -26,6 +26,7 @@ import {
 } from "antd";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { appActions } from "../../../app/appSlice";
 import {
   dashboardActions,
   selectIsOpenModalTransfers,
@@ -358,7 +359,6 @@ function MoneyTransferMyFriend({
             <Tag
               style={{ borderRadius: 10, cursor: "pointer" }}
               onClick={(e) => {
-                console.log(e);
                 setMessage(e.target.innerText + "💰");
               }}
             >
@@ -367,7 +367,6 @@ function MoneyTransferMyFriend({
             <Tag
               style={{ borderRadius: 10, cursor: "pointer" }}
               onClick={(e) => {
-                console.log(e);
                 setMessage(e.target.innerText + "💰");
               }}
             >
@@ -376,7 +375,6 @@ function MoneyTransferMyFriend({
             <Tag
               style={{ borderRadius: 10, cursor: "pointer" }}
               onClick={(e) => {
-                console.log(e);
                 setMessage(e.target.innerText + "💰");
               }}
             >
@@ -407,7 +405,7 @@ function ConfirmTransferMyfriend({
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [status, setStatus] = useState(false);
   const [statusConfirm, setStatusConfirm] = useState(false);
-
+  const dispatch = useDispatch();
   const handleOk = () => {
     setConfirmLoading(true);
     setTimeout(() => {
@@ -417,9 +415,20 @@ function ConfirmTransferMyfriend({
     setTimeout(() => {
       setStatus(true);
     }, 5000);
-    if (status) {
+    setTimeout(() => {
+      const time = new Date();
+      const newData = {
+        amount: value,
+        dateTime: `${time.getFullYear()}-${
+          time.getMonth() + 1
+        }-${time.getDate()}  ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`,
+        category: "Transfer",
+        name: name,
+      };
+      dispatch(appActions.transferMoney(newData));
+      dispatch(appActions.update());
       handleCancel();
-    }
+    }, 7000);
   };
 
   const handleCancel = () => {
@@ -465,9 +474,9 @@ function ConfirmTransferMyfriend({
         ) : (
           <Space direction="vertical" align="center" style={{ width: "100%" }}>
             <IssuesCloseOutlined
-              style={{ fontSize: 50, color: "#e6ff06b93" }}
+              style={{ fontSize: 50, color: "blue" }}
             />
-            <Typography.Title level={3} style={{ color: "#e6ff06b93" }}>
+            <Typography.Title level={3} style={{ color: "blue" }}>
               Chờ xác nhận
             </Typography.Title>
           </Space>

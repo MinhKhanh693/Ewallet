@@ -9,6 +9,7 @@ import {
   Col,
   Image,
   Input,
+  message,
   Modal,
   Radio,
   Row,
@@ -34,12 +35,16 @@ const style = {
     width: "95%",
   },
 };
+const Warning = (messages) => {
+  return message.warning(messages);
+};
 export default function ContractDashboard() {
   const [topUp, setTopUp] = useState(false);
   const [withDrawals, setithDrawals] = useState(false);
   const totalRemainder = useSelector(appSelect.selectTotalRemainder);
   const totalExpenditure = useSelector(appSelect.selectTotalExpenditure);
   const totalRevenue = useSelector(appSelect.selectTotalRevenue);
+  const totalRemainderBank = useSelector(appSelect.selectTotalRemainderBank);
   return (
     <div className="ContractDashboard" style={{ height: "100vh" }}>
       <Row style={{ flexDirection: "column", height: "100%" }} justify="center">
@@ -74,6 +79,7 @@ export default function ContractDashboard() {
                 visible={topUp}
                 setTopUp={setTopUp}
                 totalRemainder={totalRemainder}
+                totalRemainderBank={totalRemainderBank}
               ></TopUp>
               <WithDrawals
                 visible={withDrawals}
@@ -104,18 +110,34 @@ export default function ContractDashboard() {
     </div>
   );
 }
-function TopUp({ visible, setTopUp, totalRemainder }) {
+
+function TopUp({ visible, setTopUp, totalRemainder, totalRemainderBank }) {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [value, setValue] = useState(0);
   const dispatch = useDispatch();
 
   const handleOk = () => {
-    setConfirmLoading(true);
-    setTimeout(() => {
-      setTopUp(false);
-      setConfirmLoading(false);
-      dispatch(appActions.topUp(value));
-    }, 2000);
+    if (totalRemainderBank > value) {
+      setConfirmLoading(true);
+      const time = new Date();
+      const newData = {
+        extraAmount: value,
+        amount: 0,
+        dateTime: `${time.getFullYear()}-${
+          time.getMonth() + 1
+        }-${time.getDate()}  ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`,
+        category: "Transfer",
+        name: "Nạp tiền vào ví từ BIDV",
+      };
+      setTimeout(() => {
+        setTopUp(false);
+        setConfirmLoading(false);
+        dispatch(appActions.topUp(newData));
+        dispatch(appActions.update());
+      }, 2000);
+    } else {
+      Warning(`Số dư ngân hàng của bạn chỉ còn ${totalRemainderBank} $`);
+    }
   };
 
   const handleCancel = () => {
@@ -136,7 +158,7 @@ function TopUp({ visible, setTopUp, totalRemainder }) {
         align="center"
         style={{ width: "100%" }}
       >
-        <TopUpInput totalRemainder={totalRemainder} />
+        <TopUpInput totalRemainder={totalRemainder} value={value}/>
       </Space>
       <Space
         direction="vertical"
@@ -188,7 +210,7 @@ function TopUp({ visible, setTopUp, totalRemainder }) {
     );
   }
 
-  function TopUpInput({ totalRemainder }) {
+  function TopUpInput({ totalRemainder,value }) {
     return (
       <Space
         direction="vertical"
@@ -218,7 +240,7 @@ function TopUp({ visible, setTopUp, totalRemainder }) {
         <Input
           min={1}
           value={value}
-          onChange={(e) => setValue(e.value)}
+          onChange={(e) => setValue(e.target.value)}
           type={"number"}
           placeholder="Số tiền cần nạp"
           style={{ borderRadius: 5, margin: 5 }}
@@ -274,12 +296,26 @@ function WithDrawals({ visible, setithDrawals, totalRemainder }) {
   const [value, setValue] = useState(0);
   const dispatch = useDispatch();
   const handleOk = () => {
-    setConfirmLoading(true);
-    setTimeout(() => {
-      setithDrawals(false);
-      setConfirmLoading(false);
-      dispatch(appActions.withDrawals(value));
-    }, 2000);
+    if (value <= totalRemainder) {
+      setConfirmLoading(true);
+      const time = new Date();
+      const newData = {
+        amount: value,
+        dateTime: `${time.getFullYear()}-${
+          time.getMonth() + 1
+        }-${time.getDate()}  ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`,
+        category: "Transfer",
+        name: "Rút tiền từ ví về BIDV",
+      };
+      setTimeout(() => {
+        setithDrawals(false);
+        setConfirmLoading(false);
+        dispatch(appActions.withDrawals(newData));
+        dispatch(appActions.update());
+      }, 2000);
+    } else {
+      Warning("Số dư cần rút không đủ");
+    }
   };
 
   const handleCancel = () => {
@@ -381,7 +417,7 @@ function WithDrawals({ visible, setithDrawals, totalRemainder }) {
           </Typography.Text>
         </Space>
         <Input
-          onChange={(e) => setValue(e.value)}
+          onChange={(e) => setValue(e.target.value)}
           value={value}
           type={"number"}
           min={1}

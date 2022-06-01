@@ -47,7 +47,7 @@ export function HistoryLayout() {
                   {item.name} | {item.category}
                 </Typography.Title>
                 <Typography.Title level={5}>
-                  Amount : {item.amount}$
+                  Amount : {item.amount || item.extraAmount}$
                 </Typography.Title>
               </Timeline.Item>
             ))}
@@ -188,6 +188,9 @@ function HistoryTable({ data }) {
       title: "amount",
       dataIndex: "amount",
       width: "15%",
+      render: (_, pre) => {
+        return pre.amount === 0 ? pre.extraAmount : pre.amount;
+      },
     },
     {
       title: "dateTime",

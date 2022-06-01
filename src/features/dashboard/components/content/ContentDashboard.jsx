@@ -69,6 +69,9 @@ const columns = [
     dataIndex: "amount",
     key: "amount",
     width: "10%",
+    render : (_,pre) => {
+      return pre.amount === 0 ? pre.extraAmount : pre.amount
+    }
   },
   {
     title: "DateTime",
@@ -85,6 +88,7 @@ const columns = [
 ];
 export function ContentDashboard() {
   const data = useSelector(appSelect.selectHistory);
+
   return (
     <div className="ContentDashboard">
       <div className="content-payment">

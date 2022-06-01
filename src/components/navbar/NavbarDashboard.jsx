@@ -13,16 +13,28 @@ import {
   UserSwitchOutlined,
   WifiOutlined,
 } from "@ant-design/icons";
-import { Avatar, Col, Dropdown, List, Menu, Row, Space, Tooltip } from "antd";
+import {
+  Avatar,
+  Badge,
+  Col,
+  Dropdown,
+  List,
+  Menu,
+  Row,
+  Space,
+  Tooltip,
+} from "antd";
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
+import { appSelect } from "../../app/appSlice";
 import { authActions } from "../../features/login/authSlice";
 import "./NavbarDashboard.css";
 
 export function NavbarDashboard() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const data = useSelector(appSelect.selectHistory);
   const styleIcon = {
     fontSize: 20,
     color: "gray",
@@ -73,7 +85,9 @@ export function NavbarDashboard() {
             size={"large"}
             style={{ alignItems: "center" }}
           >
-            <Announcement data={data} styleIcon={styleIcon} />
+            <Badge color={"red"} size="default" count={data.length}>
+              <Announcement data={data} styleIcon={styleIcon} />
+            </Badge>
 
             <Tooltip title="Logout" placement="right">
               <LogoutOutlined
@@ -98,64 +112,6 @@ export function NavbarDashboard() {
     </div>
   );
 }
-const data = [
-  {
-    Name: "Quốc Khánh",
-    $: "200$",
-    Date: "2022-06-24  09:50:22",
-    Category: "Transfer",
-    icon: <UserSwitchOutlined style={{ fontSize: 20, color: "red" }} />,
-  },
-  {
-    Name: "Viettel",
-    $: "400$",
-    Date: "2022-06-22 09:50:22",
-    Category: "Wifi",
-    icon: <WifiOutlined style={{ fontSize: 20, color: "Green" }} />,
-  },
-  {
-    Name: "Electricity",
-    $: "600$",
-    Date: "2022-06-18 09:50:22",
-    Category: "Electricity",
-    icon: <ThunderboltOutlined style={{ fontSize: 20, color: "yellow" }} />,
-  },
-  {
-    Name: "Water",
-    $: "700$",
-    Date: "2022-06-12 09:50:22",
-    Category: "Water",
-    icon: <StockOutlined style={{ fontSize: 20, color: "blue" }} />,
-  },
-  {
-    Name: "DH.THỦ DẦU MỘT",
-    $: "500$",
-    Date: "2022-05-25 09:50:22",
-    Category: "Tuition fees",
-    icon: <AuditOutlined style={{ fontSize: 20, color: "orange" }} />,
-  },
-  {
-    Name: "MOMO",
-    $: "210$",
-    Date: "2022-05-22 09:50:22",
-    Category: "Tranfer",
-    icon: <UserSwitchOutlined style={{ fontSize: 20, color: "red" }} />,
-  },
-  {
-    Name: "Medic",
-    $: "370$",
-    Date: "2022-05-18 09:50:22",
-    Category: "Medical",
-    icon: <HeartOutlined style={{ fontSize: 20, color: "pink" }} />,
-  },
-  {
-    Name: "BIDV",
-    $: "870$",
-    Date: "2022-05-15 09:50:22",
-    Category: "Tranfer",
-    icon: <UserSwitchOutlined style={{ fontSize: 20, color: "red" }} />,
-  },
-];
 
 function Announcement({ data, styleIcon }) {
   return (
@@ -180,17 +136,17 @@ function Announcement({ data, styleIcon }) {
               }}
             >
               <List.Item.Meta
-                avatar={item.icon}
-                title={"Thông báo đến từ " + item.Name}
+                avatar={formatIcons(item.category)}
+                title={"Thông báo đến từ " + item.name}
                 description={
                   " Ưu đãi lên đến " +
-                  item.$ +
+                  item.amount +
                   " khi sử dụng dich vụ " +
-                  item.Category +
+                  item.category +
                   " đến từ " +
-                  item.Name +
+                  item.name +
                   " đến ngày " +
-                  item.Date +
+                  item.dateTime +
                   " ."
                 }
               />
@@ -209,3 +165,25 @@ function Announcement({ data, styleIcon }) {
     </Dropdown>
   );
 }
+//#region formatIcons
+const formatIcons = (category) => {
+  switch (category) {
+    case "Transfer":
+      return <UserSwitchOutlined style={{ fontSize: 20, color: "red" }} />;
+    case "Wifi":
+      return <WifiOutlined style={{ fontSize: 20, color: "Green" }} />;
+    case "Electricity":
+      return <ThunderboltOutlined style={{ fontSize: 20, color: "yellow" }} />;
+    case "Water":
+      return <StockOutlined style={{ fontSize: 20, color: "blue" }} />;
+    case "Tuition Fees":
+      return <AuditOutlined style={{ fontSize: 20, color: "orange" }} />;
+    case "Medical":
+      return <HeartOutlined style={{ fontSize: 20, color: "pink" }} />;
+    case "Office":
+      return <HomeOutlined style={{ fontSize: 20, color: "blue" }} />;
+    default:
+      break;
+  }
+};
+//#endregion
