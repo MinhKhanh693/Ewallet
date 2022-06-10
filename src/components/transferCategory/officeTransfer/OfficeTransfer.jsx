@@ -90,7 +90,7 @@ const data = [
     address: "Thành Phố Hồ Chí Minh",
     office: [
       {
-        src: "https://tse3.mm.bing.net/th?id=OIP.Xbm7pYEOtoIm_5IK8ZaARAHaEq&w=690&c=7&pid=Api&p=0",
+        src: "https://tse2.explicit.bing.net/th?id=OIP.N-lqiDstAtXPmvV22IqsLQHaFZ&pid=Api",
         name: "Chung cư Petroland",
         direction: "12 Tân Trào,Phường Tân Phú,Quận 7",
       },
@@ -110,7 +110,7 @@ const data = [
     address: "Hà Nội",
     office: [
       {
-        src: "https://tse3.mm.bing.net/th?id=OIP.Xbm7pYEOtoIm_5IK8ZaARAHaEq&w=690&c=7&pid=Api&p=0",
+        src: "https://tse2.explicit.bing.net/th?id=OIP.N-lqiDstAtXPmvV22IqsLQHaFZ&pid=Api",
         name: "Chung cư Petroland",
         direction: "12 Tân Trào,Phường Tân Phú,Quận 7",
       },
@@ -130,7 +130,7 @@ const data = [
     address: "Bình Dương",
     office: [
       {
-        src: "https://tse3.mm.bing.net/th?id=OIP.Xbm7pYEOtoIm_5IK8ZaARAHaEq&w=690&c=7&pid=Api&p=0",
+        src: "https://tse2.explicit.bing.net/th?id=OIP.N-lqiDstAtXPmvV22IqsLQHaFZ&pid=Api",
         name: "Chung cư Petroland",
         direction: "12 Tân Trào,Phường Tân Phú,Quận 7",
       },
@@ -150,7 +150,7 @@ const data = [
     address: "Bà Rịa Vũng Tàu",
     office: [
       {
-        src: "https://tse3.mm.bing.net/th?id=OIP.Xbm7pYEOtoIm_5IK8ZaARAHaEq&w=690&c=7&pid=Api&p=0",
+        src: "https://tse2.explicit.bing.net/th?id=OIP.N-lqiDstAtXPmvV22IqsLQHaFZ&pid=Api",
         name: "Chung cư Petroland",
         direction: "12 Tân Trào,Phường Tân Phú,Quận 7",
       },

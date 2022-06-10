@@ -103,7 +103,7 @@ const data = [
     direction: "Internet/Điện thoại cố định",
   },
   {
-    src: "https://tse3.mm.bing.net/th?id=OIP.DVxI2v-r6qXzA_1MQZ4vqwHaHa&w=690&c=7&pid=Api&p=0",
+    src: "https://tse3.mm.bing.net/th?id=OIP.N9E_91di-FqVTcTPrx7WHgHaFM&pid=Api",
     name: "SCTV",
     direction: "Truyền hình cáp internet",
   },
